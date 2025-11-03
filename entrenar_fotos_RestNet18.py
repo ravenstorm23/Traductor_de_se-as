@@ -12,7 +12,7 @@ DATASET_DIR = r"C:\Users\raven\Proyecto_de_profundizacion_traduccion_de_senas\Tr
 BATCH_SIZE = 32  # Tamaño de lote para entrenamiento y validación
 EPOCHS = 15  # Número de épocas de entrenamiento
 LR = 0.001  # Tasa de aprendizaje para el optimizador
-VAL_SPLIT = 0.2  # Porcentaje de datos para validación (20%)
+VAL_SPLIT = 0.3  # Porcentaje de datos para validación (30%)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # Usa GPU si está disponible, si no CPU
 print(f"⚡ Entrenando en: {device}")  # Muestra el dispositivo usado

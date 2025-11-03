@@ -17,7 +17,7 @@ idx2letter = {
     15:'R', 16:'T', 17:'U', 18:'V', 19:'W', 20:'X', 21:'Y'
 }
 
-# Transformaciones para la imagen antes de pasarla al modelo
+# Transformaciones para la imagen antes de pasarla al modelo corregir 
 transform = transforms.Compose([
     transforms.Resize((224, 224)),  # Redimensiona la imagen a 224x224
     transforms.ToTensor(),  # Convierte la imagen a tensor
