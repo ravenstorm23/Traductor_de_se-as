@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traductor de Señas IA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --bg-elevated: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            z-index: -1;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(-20px, 20px) rotate(180deg);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+        }
+
+        .video-container {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #video-feed {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .current-letter {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .letter-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .confidence-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .confidence-badge.confidence-low {
+            background: rgba(239, 68, 68, 0.9);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .icon-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .icon-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .display-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            min-height: 2rem;
+            word-break: break-word;
+        }
+
+        .sign-animation-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sign-display {
+            font-size: 150px;
+            margin: 1rem 0;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .sign-display.active {
+            opacity: 1;
+            transform: scale(1);
+            animation: signPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes signPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .sign-label {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 1rem;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .progress-container.active {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--warning), var(--success));
+            transition: width 0.2s ease;
+            border-radius: 10px;
+        }
+
+        .letters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            min-height: 50px;
+        }
+
+        .letter-pill {
+            background: var(--bg-elevated);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .suggestions-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .suggestion-chip {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .suggestion-chip:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .stable-indicator {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid var(--warning);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--warning);
+            display: none;
+        }
+
+        .stable-indicator.active {
+            display: block;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .btn {
+            margin-top: 1rem;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .sign-display {
+                font-size: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-animation"></div>
+
+    <div class="container">
+        <header>
+            <h1> Traductor de Señas IA</h1>
+            <p class="subtitle">Reconocimiento en tiempo real con ResNet18</p>
+        </header>
+
+        <div class="main-grid">
+            <!-- Video Section -->
+            <div class="video-card">
+                <div class="video-container">
+                    <img id="video-feed" src="{{ url_for('video_feed') }}" alt="Video Feed">
+                    <div class="video-overlay">
+                        <div class="current-letter">
+                            <div class="letter-display" id="current-letter">-</div>
+                        </div>
+                        <div class="confidence-badge" id="confidence-badge">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sign Animation -->
+                <div class="sign-animation-card">
+                    <div class="card-header">
+                        <div class="card-icon icon-primary">
+                            <i class="fas fa-hand-sparkles"></i>
+                        </div>
+                        <h3 class="card-title">Seña LSC Detectada</h3>
+                    </div>
+                    <div class="sign-display" id="sign-display">🤟</div>
+                    <div class="sign-label" id="sign-label">-</div>
+                    <div class="progress-container" id="progress-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                </div>
+
+                <!-- Current Word -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-primary">
+                            <i class="fas fa-hand-point-up"></i>
+                        </div>
+                        <h3 class="card-title">Palabra Actual</h3>
+                    </div>
+                    <div class="display-text" id="palabra-actual">-</div>
+                    <div class="letters-container" id="letters-container"></div>
+
+                    <!-- Autocomplete Suggestions -->
+                    <div class="suggestions-container" id="suggestions-container"></div>
+
+                    <div class="stable-indicator" id="stable-indicator">
+                        <i class="fas fa-hourglass-half"></i> Confirmando en: <span id="stable-timer">-</span>s
+                    </div>
+                </div>
+
+                <!-- Full Phrase -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-success">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="card-title">Frase Completa</h3>
+                    </div>
+                    <div class="display-text" id="frase">-</div>
+                    <div class="btn-group">
+                        <button class="btn btn-success" onclick="hablarFrase()">
+                            <i class="fas fa-volume-up"></i> Escuchar
+                        </button>
+                        <button class="btn btn-danger" onclick="borrarFrase()">
+                            <i class="fas fa-trash-alt"></i> Borrar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="status-indicator">
+                            <div class="status-dot"></div>
+                            <span>Sistema Activo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const signEmojis = {
+            'A': '✊', 'B': '🖐️', 'C': '🤏', 'D': '👌', 'E': '✊',
+            'F': '👌', 'H': '☝️', 'I': '🤙', 'K': '✌️', 'L': '🤘',
+            'M': '✊', 'N': '✊', 'O': '👌', 'P': '👇', 'R': '✌️',
+            'T': '✊', 'U': '✌️', 'V': '✌️', 'W': '🤟', 'X': '☝️', 'Y': '🤙'
+        };
+
+        // Actualizar estado cada 200ms
+        setInterval(async () => {
+            try {
+                const response = await fetch('/get_estado');
+                const data = await response.json();
+
+                // 1. Actualizar letra actual
+                const letterEl = document.getElementById('current-letter');
+                if (letterEl) letterEl.textContent = data.letra || '-';
+
+                // 2. Actualizar animación de seña
+                const signDisplay = document.getElementById('sign-display');
+                const signLabel = document.getElementById('sign-label');
+                if (signDisplay && signLabel) {
+                    if (data.letra) {
+                        signDisplay.textContent = signEmojis[data.letra] || '🤟';
+                        signLabel.textContent = data.letra;
+                        signDisplay.classList.add('active');
+                    } else {
+                        signDisplay.textContent = '🤟';
+                        signLabel.textContent = '-';
+                        signDisplay.classList.remove('active');
+                    }
+                }
+
+                // 3. Actualizar confianza
+                const confEl = document.getElementById('confidence-badge');
+                if (confEl) {
+                    const confPercent = Math.round(data.confianza * 100);
+                    confEl.textContent = confPercent + '%';
+                    confEl.className = data.confianza >= 0.80 ? 'confidence-badge' : 'confidence-badge confidence-low';
+                }
+
+                // 4. Letra estable y progreso
+                const stableIndicator = document.getElementById('stable-indicator');
+                const stableTimer = document.getElementById('stable-timer');
+                const progressContainer = document.getElementById('progress-container');
+                const progressBar = document.getElementById('progress-bar');
+
+                if (data.letra_estable && data.tiempo_restante !== undefined) {
+                    stableIndicator.classList.add('active');
+                    stableTimer.textContent = data.tiempo_restante.toFixed(1);
+                    progressContainer.classList.add('active');
+                    const progress = ((2.5 - data.tiempo_restante) / 2.5) * 100;
+                    progressBar.style.width = progress + '%';
+                } else {
+                    stableIndicator.classList.remove('active');
+                    progressContainer.classList.remove('active');
+                    progressBar.style.width = '0%';
+                }
+
+                // 5. Palabra actual
+                const palabraActualEl = document.getElementById('palabra-actual');
+                if (palabraActualEl) palabraActualEl.textContent = data.palabra_actual || '-';
+
+                // 6. Letras detectadas
+                const lettersContainer = document.getElementById('letters-container');
+                if (lettersContainer && data.letras) {
+                    lettersContainer.innerHTML = '';
+                    data.letras.forEach(letra => {
+                        const pill = document.createElement('div');
+                        pill.className = 'letter-pill';
+                        pill.textContent = letra;
+                        lettersContainer.appendChild(pill);
+                    });
+                }
+
+                // 7. Sugerencias
+                const suggestionsContainer = document.getElementById('suggestions-container');
+                if (suggestionsContainer && data.sugerencias) {
+                    suggestionsContainer.innerHTML = '';
+                    data.sugerencias.forEach(word => {
+                        const chip = document.createElement('div');
+                        chip.className = 'suggestion-chip';
+                        chip.textContent = word;
+                        chip.onclick = () => completarPalabra(word);
+                        suggestionsContainer.appendChild(chip);
+                    });
+                }
+
+                // 8. Frase completa
+                const fraseEl = document.getElementById('frase');
+                if (fraseEl) fraseEl.textContent = data.frase || '-';
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }, 200);
+
+        async function completarPalabra(palabra) {
+            try {
+                await fetch('/completar_palabra', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ palabra: palabra })
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function borrarFrase() {
+            try {
+                await fetch('/borrar_frase', { method: 'POST' });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function hablarFrase() {
+            try {
+                const response = await fetch('/hablar_frase', { method: 'POST' });
+                const data = await response.json();
+                if (!data.success) {
+                    alert(data.error || 'Error al generar voz');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al conectar con el servidor');
+            }
+        }
+
+        // Atajo de teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'v' || e.key === 'V') {
+                hablarFrase();
+            }
+        });
+    </script>
+</body>
+
+</html>

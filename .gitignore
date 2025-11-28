@@ -1,0 +1,6 @@
+.venv312/
+.venv/
+__pycache__/
+*.pyc
+test_cam.py
+.DS_Store
