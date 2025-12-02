@@ -1,5 +1,6 @@
 from flask import Flask, render_template, Response, jsonify, request
 import cv2
+import numpy as np
 import torch
 import torch.nn as nn
 from torchvision import models, transforms
@@ -233,8 +234,8 @@ def generate_frames():
     global cap, state
     
     # URL de la cámara IP (si se usa celular) o 0 para webcam
-    CAMERA_SOURCE = "http://192.168.1.2:8080/video" 
-    # CAMERA_SOURCE = 0 
+    #CAMERA_SOURCE = "http://10.0.135.83:8080/video" 
+    CAMERA_SOURCE = 0 
     
     # Usar la clase CameraStream para evitar lag
     if cap is None:
@@ -282,6 +283,7 @@ def generate_frames():
             x_max = int(max([lm.x for lm in landmarks]) * w)
             y_max = int(max([lm.y for lm in landmarks]) * h)
             
+            # Añade margen para incluir toda la mano y algo de espacio
             margen = 40
             x_min = max(0, x_min - margen)
             y_min = max(0, y_min - margen)
@@ -291,7 +293,7 @@ def generate_frames():
             # Dibujar caja (Verde)
             cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
             
-            # ROI y Predicción
+            # Extrae ROI y predice si el ROI no está vacío
             roi = frame[y_min:y_max, x_min:x_max]
             if roi.size > 0:
                 # Obtener top 3 predicciones
