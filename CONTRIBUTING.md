@@ -1,6 +1,6 @@
 # Contributing
 
-## 👥 Equipo de Desarrollo
+##  Equipo de Desarrollo
 
 Este proyecto fue desarrollado como parte de un proyecto de profundización universitario por:
 
@@ -8,7 +8,7 @@ Este proyecto fue desarrollado como parte de un proyecto de profundización univ
 - **Mateo Rivera Maya**
 - **Diego Fernando Fuentes**
 
-## 📚 Contexto del Proyecto
+##  Contexto del Proyecto
 
 **Traductor de Lenguaje de Señas con IA** es un proyecto académico de profundización que tiene como objetivo facilitar la comunicación para la comunidad sorda mediante el uso de visión por computadora y aprendizaje profundo.
 
@@ -19,14 +19,14 @@ Este proyecto fue desarrollado como parte de un proyecto de profundización univ
 - Crear una interfaz web accesible y fácil de usar
 - Contribuir a la inclusión digital de la comunidad sorda
 
-## 🛠️ Tecnologías Utilizadas
+##  Tecnologías Utilizadas
 
 - **Backend:** Flask, PyTorch, OpenCV, MediaPipe
 - **Frontend:** HTML5, CSS3, JavaScript
 - **Modelo:** ResNet18 pre-entrenado con fine-tuning
 - **Detección:** MediaPipe Hands para segmentación de manos
 
-## 🤝 Contribuciones Futuras
+##  Contribuciones Futuras
 
 Si deseas contribuir a este proyecto:
 
@@ -45,7 +45,7 @@ Si deseas contribuir a este proyecto:
 - Implementar reconocimiento de señas dinámicas (no solo estáticas)
 - Crear una aplicación móvil
 
-## 📝 Código de Conducta
+##  Código de Conducta
 
 Este proyecto se adhiere a los principios de respeto, inclusión y colaboración. Esperamos que todos los contribuyentes:
 
@@ -54,14 +54,14 @@ Este proyecto se adhiere a los principios de respeto, inclusión y colaboración
 - Se enfoquen en lo que es mejor para la comunidad
 - Muestren empatía hacia otros miembros
 
-## 📄 Licencia
+##  Licencia
 
 Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
 
-## 📧 Contacto
+##  Contacto
 
 Para preguntas o sugerencias sobre el proyecto, puedes abrir un issue en el repositorio.
 
 ---
 
-**Desarrollado con ❤️ para la comunidad sorda**
+**Desarrollado con  para la comunidad sorda**
