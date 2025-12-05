@@ -44,12 +44,12 @@ class AutocompleteService:
             if os.path.exists(path):
                 with open(path, 'r', encoding='utf-8') as f:
                     self.words = [line.strip().upper() for line in f if line.strip()]
-                print(f"✅ Diccionario cargado: {len(self.words)} palabras")
+                print(f" Diccionario cargado: {len(self.words)} palabras")
             else:
-                print("⚠️ Diccionario no encontrado, usando lista básica")
+                print(" Diccionario no encontrado, usando lista básica")
                 self.words = ["HOLA", "MUNDO", "COMO", "ESTAS", "GRACIAS", "ADIOS", "BUENOS", "DIAS"]
         except Exception as e:
-            print(f"❌ Error cargando diccionario: {e}")
+            print(f" Error cargando diccionario: {e}")
             self.words = []
 
     def get_suggestions(self, prefix, limit=5):
@@ -78,9 +78,9 @@ num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, len(CLASSES))
 try:
     model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
-    print(f"✅ Modelo ResNet cargado desde {MODEL_PATH}")
+    print(f" Modelo ResNet cargado desde {MODEL_PATH}")
 except Exception as e:
-    print(f"❌ Error cargando modelo ResNet: {e}")
+    print(f" Error cargando modelo ResNet: {e}")
 
 model.to(DEVICE)
 model.eval()
@@ -195,37 +195,77 @@ def predict_frame(frame, topk=3):
 # ==============================
 class CameraStream:
     def __init__(self, src=0):
-        self.stream = cv2.VideoCapture(src)
-        # Optimización: Buffer size 1
+        print(f" Inicializando cámara con source: {src}")
+        # Usar DirectShow explícitamente en Windows para mejor compatibilidad
+        self.stream = cv2.VideoCapture(src, cv2.CAP_DSHOW)
+        
+        if not self.stream.isOpened():
+            print("ERROR: No se pudo abrir la cámara")
+            self.grabbed = False
+            self.frame = None
+            self.stopped = False
+            self.lock = threading.Lock()
+            return
+        
+        print("✅ Cámara abierta, configurando...")
+        # Optimizaciones
         self.stream.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-        (self.grabbed, self.frame) = self.stream.read()
+        self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        
+        # ⏳ CRÍTICO: Dar tiempo a la cámara para inicializar
+        print(" Esperando inicialización de hardware (2s)...")
+        time.sleep(2.0)
+        
+        # Descartar primeros frames (pueden estar corruptos/vacíos)
+        print("Descartando primeros frames...")
+        for i in range(5):
+            ret, frame = self.stream.read()
+            if ret and frame is not None:
+                print(f" Frame válido capturado ({i+1}/5)")
+                self.grabbed = True
+                self.frame = frame
+                break
+            time.sleep(0.2)
+        else:
+            print(" No se capturaron frames válidos, esperando al hilo...")
+            self.grabbed = False
+            self.frame = None
+        
         self.stopped = False
         self.lock = threading.Lock()
 
     def start(self):
         if self.stream.isOpened():
-            print("✅ Conexión con cámara establecida correctamente")
+            print(" Iniciando hilo de captura")
         else:
-            print("❌ ERROR: No se pudo conectar a la cámara. Verifique la IP y que la app esté corriendo.")
-        threading.Thread(target=self.update, args=()).start()
+            print("ERROR: Cámara no disponible")
+        threading.Thread(target=self.update, args=(), daemon=True).start()
         return self
 
     def update(self):
+        print("Hilo de video iniciado...")
+        frame_count = 0
         while True:
             if self.stopped:
+                print(" Deteniendo hilo de video")
                 return
             (grabbed, frame) = self.stream.read()
             with self.lock:
                 self.grabbed = grabbed
                 self.frame = frame
+            frame_count += 1
+            if frame_count == 1:
+                print(f" Primer frame capturado en hilo")
 
     def read(self):
         with self.lock:
-            return self.frame.copy() if self.grabbed else None
+            return self.frame.copy() if self.grabbed and self.frame is not None else None
 
     def stop(self):
         self.stopped = True
         self.stream.release()
+        print(" Cámara liberada")
 
 # ==============================
 # GENERADOR DE VIDEO
@@ -240,14 +280,14 @@ def generate_frames():
     # Usar la clase CameraStream para evitar lag
     if cap is None:
         cap = CameraStream(CAMERA_SOURCE).start()
-        print(f"📷 Cámara iniciada en hilo independiente: {CAMERA_SOURCE}")
+        print(f" Cámara iniciada en hilo independiente: {CAMERA_SOURCE}")
     
     while True:
         frame = cap.read()
         if frame is None:
             # Si no hay frame, esperar un poco y reintentar
             time.sleep(0.1)
-            # print("⚠️ Esperando frame...") # Descomentar para debug
+            # print(" Esperando frame...") # Descomentar para debug
             continue
             
         # Espejo SOLO si es webcam (0). Para IP Cam (celular trasero) no voltear.
@@ -309,7 +349,7 @@ def generate_frames():
                         for alt_letra, alt_conf in top_preds[1:]:
                             if alt_conf > 0.4: 
                                 if autocomplete_service.is_valid_prefix(palabra_actual + alt_letra):
-                                    print(f"🧠 Corrección Contextual: {letra_predicha}({conf:.2f}) -> {alt_letra}({alt_conf:.2f})")
+                                    print(f" Corrección Contextual: {letra_predicha}({conf:.2f}) -> {alt_letra}({alt_conf:.2f})")
                                     letra_predicha = alt_letra
                                     conf = alt_conf
                                     break
@@ -348,7 +388,7 @@ def generate_frames():
                             sugerencias = autocomplete_service.get_suggestions(palabra_actual)
                             if len(sugerencias) == 1:
                                 palabra_final = sugerencias[0]
-                                print(f"✨ Autocompletado automático: {palabra_actual} -> {palabra_final}")
+                                print(f" Autocompletado automático: {palabra_actual} -> {palabra_final}")
                                 state.letras_detectadas = list(palabra_final)
                                 state.finalizar_palabra()
                         # --------------------------------------------
@@ -375,7 +415,7 @@ def generate_frames():
             # Guardar palabra si pasa tiempo sin mano
             if (time.time() - state.ultima_det_mano) > NO_HAND_TIMEOUT and state.letras_detectadas:
                 state.finalizar_palabra()
-                print("✅ Palabra guardada automáticamente")
+                print(" Palabra guardada automáticamente")
         
         # Limpieza total tras 10 segundos
         if (time.time() - state.tiempo_ultima_letra) > CLEAR_TIMEOUT and (state.palabras or state.letras_detectadas):
@@ -473,5 +513,5 @@ def hablar_frase():
         return jsonify({'success': False, 'error': str(e)})
 
 if __name__ == '__main__':
-    print("✅ Servidor iniciado en http://localhost:5000")
+    print(" Servidor iniciado en http://localhost:5000")
     app.run(debug=True, threaded=True)
