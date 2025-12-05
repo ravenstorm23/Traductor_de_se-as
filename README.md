@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🤟 Traductor de Lenguaje de Señas con IA
+# Traductor de Lenguaje de Señas con IA
 
 ### Reconocimiento en tiempo real del lenguaje de señas colombiano usando Deep Learning
 
@@ -23,31 +23,31 @@ El **Traductor de Lenguaje de Señas** es una aplicación web que utiliza visió
 
 Este proyecto busca **facilitar la comunicación** para la comunidad sorda mediante tecnología accesible y de código abierto.
 
-### 🎯 Objetivos
+###  Objetivos
 
-- ✅ Reconocer 22 letras del alfabeto en LSC en tiempo real
-- ✅ Proporcionar una interfaz web intuitiva y accesible
-- ✅ Implementar corrección contextual con diccionario
-- ✅ Ofrecer autocompletado inteligente de palabras
-- ✅ Contribuir a la inclusión digital
+-  Reconocer 22 letras del alfabeto en LSC en tiempo real
+-  Proporcionar una interfaz web intuitiva y accesible
+-  Implementar corrección contextual con diccionario
+-  Ofrecer autocompletado inteligente de palabras
+-  Contribuir a la inclusión digital
 
 ---
 
-## ✨ Características
+##  Características
 
-### 🔥 Funcionalidades Principales
+###  Funcionalidades Principales
 
-- **🎥 Reconocimiento en Tiempo Real:** Detecta letras del alfabeto instantáneamente usando tu webcam
-- **🧠 IA Avanzada:** Modelo ResNet18 fine-tuned con >85% de precisión
-- **⏱️ Sistema de Estabilidad:** Confirma letras después de 2.5 segundos para mayor precisión
-- **📝 Formación de Palabras:** Acumula letras y forma palabras automáticamente
-- **💡 Autocompletado Inteligente:** Sugiere palabras basadas en un diccionario de 6,900+ términos
-- **🎯 Corrección Contextual:** Corrige predicciones usando contexto lingüístico
-- **🎨 Interfaz Premium:** Diseño moderno con gradientes, animaciones y efectos visuales
-- **🔊 Text-to-Speech:** Síntesis de voz para reproducir las frases formadas
-- **⌨️ Atajos de Teclado:** `O` para finalizar palabra, `C` para limpiar
+- ** Reconocimiento en Tiempo Real:** Detecta letras del alfabeto instantáneamente usando tu webcam
+- ** IA Avanzada:** Modelo ResNet18 fine-tuned con >85% de precisión
+- ** Sistema de Estabilidad:** Confirma letras después de 2.5 segundos para mayor precisión
+- ** Formación de Palabras:** Acumula letras y forma palabras automáticamente
+- ** Autocompletado Inteligente:** Sugiere palabras basadas en un diccionario de 6,900+ términos
+- ** Corrección Contextual:** Corrige predicciones usando contexto lingüístico
+- ** Interfaz Premium:** Diseño moderno con gradientes, animaciones y efectos visuales
+- ** Text-to-Speech:** Síntesis de voz para reproducir las frases formadas
+- ** Atajos de Teclado:** `O` para finalizar palabra, `C` para limpiar
 
-### 🎨 Interfaz de Usuario
+###  Interfaz de Usuario
 
 - Video en vivo con overlay de información
 - Indicador visual de estabilidad (barra de progreso)
@@ -58,7 +58,7 @@ Este proyecto busca **facilitar la comunicación** para la comunidad sorda media
 
 ---
 
-## 🎬 Demo
+##  Demo
 
 > [!NOTE]
 > Aquí puedes agregar un GIF o screenshot de la aplicación en funcionamiento
@@ -73,7 +73,7 @@ Este proyecto busca **facilitar la comunicación** para la comunidad sorda media
 
 ---
 
-## 🚀 Instalación
+##  Instalación
 
 ### Requisitos Previos
 
@@ -118,7 +118,7 @@ modelos_abecedario/mejor_modelo_resnet18.pth
 
 ---
 
-## 💻 Uso
+##  Uso
 
 ### Iniciar la Aplicación
 
@@ -166,7 +166,7 @@ CLEAR_TIMEOUT = 10.0       # Segundos de inactividad para limpiar
 
 ---
 
-## 🏗️ Arquitectura Técnica
+##  Arquitectura Técnica
 
 ### Stack Tecnológico
 
@@ -194,7 +194,7 @@ Para más detalles, consulta [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ---
 
-## 📚 Documentación
+##  Documentación
 
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - Arquitectura del sistema, flujo de datos, componentes
 - **[TRAINING.md](docs/TRAINING.md)** - Dataset, data augmentation, proceso de entrenamiento
@@ -202,7 +202,7 @@ Para más detalles, consulta [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ---
 
-## 🧪 Dataset y Entrenamiento
+##  Dataset y Entrenamiento
 
 ### Dataset
 
@@ -223,7 +223,7 @@ Para más detalles, consulta [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ---
 
-## 👥 Equipo
+##  Equipo
 
 Este proyecto fue desarrollado por:
 
@@ -235,7 +235,7 @@ Como parte de un **proyecto de profundización universitario** enfocado en intel
 
 ---
 
-## 🤝 Contribuciones
+##  Contribuciones
 
 ¡Las contribuciones son bienvenidas! Por favor lee [CONTRIBUTING.md](CONTRIBUTING.md) para conocer el proceso.
 
@@ -250,7 +250,7 @@ Como parte de un **proyecto de profundización universitario** enfocado en intel
 
 ---
 
-## 📄 Licencia
+##  Licencia
 
 Este proyecto está licenciado bajo la **Licencia MIT** - ver [LICENSE](LICENSE) para detalles.
 
@@ -258,7 +258,7 @@ Esto significa que puedes usar, modificar y distribuir este código libremente, 
 
 ---
 
-## 🙏 Reconocimientos
+##  Reconocimientos
 
 - **MediaPipe** por su excelente biblioteca de detección de manos
 - **PyTorch** por el framework de deep learning
@@ -267,7 +267,7 @@ Esto significa que puedes usar, modificar y distribuir este código libremente, 
 
 ---
 
-## 📞 Contacto
+##  Contacto
 
 Para preguntas, sugerencias o colaboraciones:
 
@@ -278,9 +278,9 @@ Para preguntas, sugerencias o colaboraciones:
 
 <div align="center">
 
-### ⭐ Si este proyecto te fue útil, considera darle una estrella en GitHub
+###  Si este proyecto te fue útil, considera darle una estrella en GitHub
 
-**Desarrollado con ❤️ para la comunidad sorda**
+**Desarrollado con  para la comunidad sorda**
 
 [⬆ Volver arriba](#-traductor-de-lenguaje-de-señas-con-ia)
 
