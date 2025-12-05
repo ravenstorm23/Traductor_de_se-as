@@ -5,7 +5,7 @@
 Este proyecto fue desarrollado como parte de un proyecto de profundización universitario por:
 
 - **Raven** - [@ravenstorm23](https://github.com/ravenstorm23)
-- **Mateo Rivera Maya**
+- **Mateo Rivera Maya**  - [@Gasper11x](https://github.com/Gasper11x)
 - **Diego Fernando Fuentes**
 
 ##  Contexto del Proyecto
