@@ -1,6 +1,6 @@
 # Dataset y Entrenamiento del Modelo
 
-## 📊 Dataset
+##  Dataset
 
 ### Composición Original
 
@@ -27,7 +27,7 @@ A, B, C, D, E, F, H, I, K, L, M, N, O, P, Q, R, T, U, V, W, X, Y
 > [!IMPORTANT]
 > Estas letras fueron excluidas debido a que requieren **movimiento** (señas dinámicas) en el lenguaje de señas colombiano, mientras que este modelo está entrenado solo para **señas estáticas**.
 
-## 🔄 Data Augmentation
+##  Data Augmentation
 
 Para mejorar la robustez y generalización del modelo, se aplicaron las siguientes técnicas de **data augmentation**:
 
@@ -73,7 +73,7 @@ Para mejorar la robustez y generalización del modelo, se aplicaron las siguient
 
 Cada imagen original generó aproximadamente **8-10 variaciones**, multiplicando el tamaño efectivo del dataset por esa cantidad.
 
-## 🧠 Arquitectura del Modelo
+##  Arquitectura del Modelo
 
 ### ResNet18
 
@@ -86,10 +86,10 @@ model.fc = nn.Linear(num_ftrs, 22)  # 22 clases (letras)
 ```
 
 **Justificación de ResNet18:**
-- ✅ Balance entre precisión y velocidad
-- ✅ Pre-entrenado en ImageNet (transfer learning)
-- ✅ Arquitectura probada para clasificación de imágenes
-- ✅ Suficientemente ligero para inferencia en tiempo real
+-  Balance entre precisión y velocidad
+-  Pre-entrenado en ImageNet (transfer learning)
+-  Arquitectura probada para clasificación de imágenes
+-  Suficientemente ligero para inferencia en tiempo real
 
 ### Modificaciones
 
@@ -97,7 +97,7 @@ model.fc = nn.Linear(num_ftrs, 22)  # 22 clases (letras)
 2. **Fine-tuning:** Todas las capas entrenadas (no solo la última)
 3. **Normalización:** Usando estadísticas de ImageNet
 
-## 🎯 Proceso de Entrenamiento
+##  Proceso de Entrenamiento
 
 ### Hiperparámetros
 
@@ -166,7 +166,7 @@ transform = transforms.Compose([
 ])
 ```
 
-## 🎨 Técnicas Adicionales Implementadas
+##  Técnicas Adicionales Implementadas
 
 ### 1. Center Cropping
 - Enfoque en región central de la mano
@@ -181,7 +181,7 @@ transform = transforms.Compose([
 - Eliminación automática del fondo
 - Margen adicional (40px) para capturar toda la seña
 
-## 📝 Script de Entrenamiento
+##  Script de Entrenamiento
 
 El script `entrenar_fotos_RestNet18.py` (incluido en desarrollo, no en repo):
 
@@ -202,7 +202,7 @@ def validate(model, dataloader):
             # Calcular métricas
 ```
 
-## 🚀 Mejoras Futuras
+##  Mejoras Futuras
 
 ### Modelo
 - [ ] Probar arquitecturas más modernas (EfficientNet, Vision Transformer)
@@ -221,7 +221,7 @@ def validate(model, dataloader):
 - [ ] Few-shot learning para nuevas señas
 - [ ] Self-supervised learning
 
-## 📚 Referencias
+##  Referencias
 
 ### Papers Relevantes
 - **ResNet:** "Deep Residual Learning for Image Recognition" (He et al., 2015)
@@ -235,7 +235,7 @@ def validate(model, dataloader):
 
 ---
 
-## 💡 Lecciones Aprendidas
+##  Lecciones Aprendidas
 
 1. **Transfer Learning es crucial:** El pre-entrenamiento en ImageNet aceleró significativamente la convergencia
 
