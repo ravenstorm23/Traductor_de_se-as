@@ -1,39 +1,39 @@
 # Arquitectura del Sistema
 
-## 📋 Resumen
+##  Resumen
 
 El **Traductor de Lenguaje de Señas** es una aplicación web que utiliza visión por computadora y aprendizaje profundo para reconocer en tiempo real las letras del alfabeto en lenguaje de señas colombiano (LSC).
 
-## 🏗️ Arquitectura General
+##  Arquitectura General
 
 ```mermaid
 graph TB
-    subgraph Cliente["🌐 Frontend (Browser)"]
+    subgraph Cliente[" Frontend (Browser)"]
         UI[Interface HTML/CSS/JS]
         Video[Video Feed Display]
         Controls[Controles de Usuario]
     end
     
-    subgraph Servidor["⚙️ Backend (Flask)"]
+    subgraph Servidor[" Backend (Flask)"]
         Flask[Flask Server]
         Routes[Rutas REST API]
         VideoStream[Video Streaming]
         State[AppState Manager]
     end
     
-    subgraph Procesamiento["🔬 Procesamiento de Video"]
+    subgraph Procesamiento[" Procesamiento de Video"]
         Camera[Captura de Cámara]
         MediaPipe[MediaPipe Hands]
         ROI[Extracción ROI]
     end
     
-    subgraph IA["🤖 Modelo de IA"]
+    subgraph IA[" Modelo de IA"]
         ResNet[ResNet18]
         Predictor[Clasificador]
         Stability[Sistema de Estabilidad]
     end
     
-    subgraph Servicios["📚 Servicios"]
+    subgraph Servicios[" Servicios"]
         Dict[Autocompletado]
         Context[Corrección Contextual]
     end
@@ -53,7 +53,7 @@ graph TB
     State --> UI
 ```
 
-## 🔄 Flujo de Datos
+##  Flujo de Datos
 
 ### 1. Captura de Video
 
@@ -117,7 +117,7 @@ Predicción actual == Predicción anterior?
     SÍ → frames_consecutivos++
         ↓
     frames_consecutivos >= 8 AND tiempo >= 2.5s?
-        SÍ → ✅ CONFIRMAR LETRA
+        SÍ →  CONFIRMAR LETRA
         NO → Seguir acumulando
     
     NO → Resetear contador
@@ -140,7 +140,7 @@ Palabra actual = "HOL"
 ¿"HOLX" existe en diccionario? → NO
     ↓
 Revisar alternativas (Top-3):
-    "A" (75% confianza) → ¿"HOLA" existe? → SÍ ✅
+    "A" (75% confianza) → ¿"HOLA" existe? → SÍ 
     ↓
 Corrección: X → A
 ```
@@ -159,7 +159,7 @@ Autocompletar: "GRA" → "GRACIAS"
     └── Finalizar palabra automáticamente
 ```
 
-## 🧩 Componentes Principales
+##  Componentes Principales
 
 ### Backend (Flask)
 
@@ -230,7 +230,7 @@ setInterval(() => {
 }, 100)
 ```
 
-## ⚙️ Configuración y Parámetros
+##  Configuración y Parámetros
 
 ### Parámetros del Modelo
 
@@ -258,7 +258,7 @@ setInterval(() => {
 4. **GPU:** Soporte CUDA si está disponible
 5. **Predicción Top-K:** Solo top-3 para reducir cómputo
 
-## 🔐 Gestión de Estado
+## Gestión de Estado
 
 ```python
 AppState mantiene:
@@ -283,7 +283,7 @@ AppState mantiene:
 - **Actualización UI:** 100ms (polling)
 - **Tiempo total de respuesta:** <200ms
 
-## 🔮 Tecnologías Clave
+##  Tecnologías Clave
 
 | Tecnología    | Versión             | Propósito              |
 | ------------- | ------------------- | ---------------------- |
@@ -293,21 +293,21 @@ AppState mantiene:
 | **MediaPipe** | 0.10.x              | Detección de manos     |
 | **ResNet18**  | ImageNet pretrained | Clasificación          |
 
-## 📈 Escalabilidad y Mejoras Futuras
+## Escalabilidad y Mejoras Futuras
 
 ### Optimizaciones Posibles
-- ✨ Implementar WebSockets en lugar de polling
-- ✨ Usar TensorRT para acelerar inferencia
-- ✨ Implementar modelo más ligero (MobileNet)
-- ✨ Caching de predicciones similares
-- ✨ Quantización del modelo
+-  Implementar WebSockets en lugar de polling
+-  Usar TensorRT para acelerar inferencia
+-  Implementar modelo más ligero (MobileNet)
+-  Caching de predicciones similares
+-  Quantización del modelo
 
 ### Funcionalidades Futuras
-- 🚀 Reconocimiento de señas dinámicas (movimiento)
-- 🚀 Soporte para más idiomas de señas
-- 🚀 Modo offline con caché de modelo
-- 🚀 API REST para integración con otras apps
-- 🚀 Aplicación móvil nativa
+-  Reconocimiento de señas dinámicas (movimiento)
+-  Soporte para más idiomas de señas
+-  Modo offline con caché de modelo
+-  API REST para integración con otras apps
+-  Aplicación móvil nativa
 
 ---
 
