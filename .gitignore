@@ -1,7 +1,39 @@
+# Virtual Environments
 .venv312/
 .venv/
+venv/
+env/
+ENV/
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Test files and development scripts
 test_cam.py
+camara_RestNet18.py
+camara_auto4.py
+entrenar_fotos_RestNet18.py
+filter_dictionary.py
+
+# Backup files
+*.backup
+*~
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
+Thumbs.db
+
+# Models (large files)
 yolov8n-pose.pt
+*.pth
+
+# Logs
+*.log
