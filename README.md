@@ -17,7 +17,7 @@
 
 ---
 
-## 📖 Sobre el Proyecto
+##  Sobre el Proyecto
 
 El **Traductor de Lenguaje de Señas** es una aplicación web que utiliza visión por computadora y aprendizaje profundo para reconocer en tiempo real las letras del alfabeto en lenguaje de señas colombiano (LSC). 
 
